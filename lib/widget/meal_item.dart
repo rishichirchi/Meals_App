@@ -6,6 +6,7 @@ import 'package:meals/widget/meal_item_trait.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
+  final void Function(Meal meal) onToggleFavorite;
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() +
@@ -17,7 +18,7 @@ class MealItem extends StatelessWidget {
         meal.affordability.name.substring(1);
   }
 
-  const MealItem({super.key, required this.meal});
+  const MealItem({super.key, required this.meal, required this.onToggleFavorite});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -31,7 +32,7 @@ class MealItem extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (ctx) => MealDetailsScreen(meal: meal),
+              builder: (ctx) => MealDetailsScreen(meal: meal, onToggleFavorite: onToggleFavorite),
             ),
           );
         },

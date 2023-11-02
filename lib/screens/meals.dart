@@ -4,15 +4,16 @@ import 'package:meals/models/meal.dart';
 import 'package:meals/widget/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  final String title;
+  final String? title;
   final List<Meal> meals;
-  const MealsScreen({super.key, required this.title, required this.meals});
+  final void Function(Meal meal) onToggleFavorite;
+  const MealsScreen({super.key, this.title, required this.meals, required this.onToggleFavorite});
 
   @override
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
       itemCount: meals.length,
-      itemBuilder: (ctx, index) => MealItem(meal: meals[index]),
+      itemBuilder: (ctx, index) => MealItem(meal: meals[index], onToggleFavorite: onToggleFavorite),
     );
 
     if (meals.isEmpty) {
@@ -20,10 +21,9 @@ class MealsScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Uh oh ...... Nothing here!",style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onBackground)),
+            Text("Uh oh ...... Nothing here!",
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground)),
             const SizedBox(
               height: 16,
             ),
@@ -38,9 +38,12 @@ class MealsScreen extends StatelessWidget {
         ),
       );
     }
+    if (title == null) {
+      return content;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );
